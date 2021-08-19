@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <business_calendar/>
+        <condition/>
+        <conditional>false</conditional>
+        <entered_time>1970-01-01 00:00:00</entered_time>
+        <name>Incidents with State Awaiting user info for more than 3 days</name>
+        <offset/>
+        <offset_type/>
+        <run_as display_value="System Administrator">6816f79cc0a8016401c5a33be04be441</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2021-08-17 09:17:29</run_start>
+        <run_time>1970-01-01 08:03:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[function findAwaitingUserInfoDelayed(state, number) {
+    var incidentGA = new GlideAggregate('incident'); // create new aggregate
+    incidentGA.addQuery('state', 3); // condition = state is on hold
+    incidentGA.addQuery('hold_reason', 1); // hold reason = Awaiting Caller
+    incidentGA.addQuery('opened_at', '>=', 'javascript:gs.daysAgo(3)'); // checking if opened more than 3 days ago
+    incidentGA.addAggregate('COUNT', 'sys_mod_count'); // count all records
+    incidentGA.query();
+
+    if (incidentGA.next()) {
+        gs.info('COUNT: ' + incidentGA.getAggregate('COUNT', 'sys_mod_count')); // create log with the result from counting
+    }
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2021-08-17 10:36:17</sys_created_on>
+        <sys_id>31c1ec91078230106986f0269c1ed055</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Incidents with State Awaiting user info for more than 3 days</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sysauto_script_31c1ec91078230106986f0269c1ed055</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2021-08-17 11:02:04</sys_updated_on>
+        <time_zone/>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>
